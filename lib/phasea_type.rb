@@ -11,7 +11,7 @@ COLOURS = { 'S' => :black,
             'D' => :red,
             'H' => :red }.freeze
 
-CARDS = { '1' => 1,
+CARDS = { 'A' => 1,
           '2' => 2,
           '3' => 3,
           '4' => 4,
@@ -136,7 +136,7 @@ def phasea_phase_four(group)
   card_index = 0
   first_natural = nil
   group.each do |card|
-    card_index += 1
+    card_index += 1 unless card_index.zero? && WILDS.include?(card)
     next if WILDS.include?(card)
     natural_count += 1
     value = CARDS[card[0]]
@@ -165,15 +165,15 @@ def phasea_phase_five_1(group)
   first_natural_value = nil
   first_natural_colour = nil
   group.each do |card|
-    card_index += 1
+    card_index += 1 unless card_index.zero? && WILDS.include?(card)
     next if WILDS.include?(card)
     natural_count += 1
     value = CARDS[card[0]]
     colour = COLOURS[card[1]]
     first_natural_value ||= value
     first_natural_colour ||= colour
-    return nil unless colour == first_natural_colour
-    return nil unless value == first_natural_value + (card_index - 1)
+    position = first_natural_value + (card_index - 1)
+    return nil unless colour == first_natural_colour && value == position
   end
 
   return nil unless group.count == 4 && natural_count >= 2
@@ -194,10 +194,9 @@ def phasea_phase_five_2(group)
     colour = COLOURS[card[1]]
     first_value ||= value
     first_colour ||= colour
-    return nil unless colour == first_colour
-    return nil unless value == first_value + (card_index - 1)
+    position = first_value + (card_index - 1)
+    return nil unless colour == first_colour && value == position
   end
-
   5.2
 end
 
@@ -233,7 +232,7 @@ def phasea_phase_type(group)
         phasea_phase_five_2(group[0]) == 5.2
 
     return 5.2
+  else
+    return nil
   end
-
-  nil
 end

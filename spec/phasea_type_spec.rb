@@ -41,12 +41,20 @@ describe 'PhaseAType' do
       expect(phasea_phase_type([['6H', '7S', 'AC', '9H', '0C', 'AH', 'QS', 'KC']])).to eq(4)
     end
 
+    it 'returns the phase type 4 when first card is wild' do
+      expect(phasea_phase_type([['AH', '7S', 'AC', '9H', '0C', 'AH', 'QS', 'KC']])).to eq(4)
+    end
+
     it 'returns nil if invalid phase 4' do
       expect(phasea_phase_type([['4H', '5S', 'AC', '8H', '7C', 'AH', '0S', 'JC']])).to eq(nil)
     end
 
     it 'returns the phase type 5.1' do
       expect(phasea_phase_type([['9H', '0D', 'AC', 'QH']])).to eq(5.1)
+    end
+
+    it 'returns the phase type 5.1 when first card is wild' do
+      expect(phasea_phase_type([['AH', '0D', 'JD', 'QH']])).to eq(5.1)
     end
 
     it 'returns nil if invalid phase 5.1' do
