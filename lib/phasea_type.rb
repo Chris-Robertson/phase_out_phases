@@ -181,9 +181,10 @@ def phasea_phase_five_1(group)
 end
 
 # Phase 5_2
-# a "run" of N cards of the same colour: a run of N cards where all cards are of the same colour,
-# as defined by the suit (Spades && Clubs are black,&& Hearts && Diamonds are red; e.g.['2S', '3C', '4C', '5S']
-# is a run of 4 black cards)
+# A "run" of N cards of the same colour: a run of N cards where all cards are
+# of the same colour, as defined by the suit (Spades && Clubs are black,&&
+# Hearts && Diamonds are red; e.g.['2S', '3C', '4C', '5S'] is a run of 4 black
+# cards)
 def phasea_phase_five_2(group)
   card_index = 0
   first_value = nil
@@ -207,32 +208,37 @@ def phasea_phase_type(group)
       phasea_phase_one(group[0]) == 1 &&
       phasea_phase_one(group[1]) == 1
 
-    return 1
+    1
+
   elsif group.count == 1 &&
         group[0].count == 7 &&
         phasea_phase_two(group[0]) == 2
 
-    return 2
+    2
+
   elsif group.count == 1 &&
         group[0].count == 4 &&
         phasea_phase_three(group[0]) == 3
 
-    return 3
+    3
+
   elsif group.count == 1 &&
         group[0].count == 8 &&
         phasea_phase_four(group[0]) == 4
 
-    return 4
+    4
+
   elsif group.count == 1 &&
         group[0].count == 4 &&
         phasea_phase_five_1(group[0]) == 5.1
 
-    return 5.1
+    5.1
+
   elsif group.count == 1 &&
         phasea_phase_five_2(group[0]) == 5.2
 
-    return 5.2
-  else
-    return nil
+    5.2
+
   end
+  nil
 end
