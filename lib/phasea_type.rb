@@ -139,9 +139,10 @@ def phasea_phase_four(group)
     card_index += 1
     next if WILDS.include?(card)
     natural_count += 1
-    value = card[0]
-    first_natural ||= CARDS[value]
-    return nil unless CARDS[value] == first_natural + (card_index - 1)
+    value = CARDS[card[0]]
+    first_natural ||= value
+    position = first_natural + (card_index - 1)
+    return nil unless value == position
   end
 
   return nil unless group.count == 8 && natural_count >= 2
@@ -160,13 +161,19 @@ end
 # four cards of the same colour, as it is not in sequence.
 def phasea_phase_five_1(group)
   natural_count = 0
-  first_suit = nil
+  card_index = 0
+  first_natural_value = nil
+  first_natural_colour = nil
   group.each do |card|
+    card_index += 1
     next if WILDS.include?(card)
     natural_count += 1
-    suit = COLOURS[card[1]]
-    first_suit ||= suit
-    return nil unless suit == first_suit
+    value = CARDS[card[0]]
+    colour = COLOURS[card[1]]
+    first_natural_value ||= value
+    first_natural_colour ||= colour
+    return nil unless colour == first_natural_colour
+    return nil unless value == first_natural_value + (card_index - 1)
   end
 
   return nil unless group.count == 4 && natural_count >= 2
@@ -174,57 +181,59 @@ def phasea_phase_five_1(group)
 end
 
 # Phase 5_2
-# a “run” of N cards of the same colour: a run of N cards where all cards are of the same colour,
+# a "run" of N cards of the same colour: a run of N cards where all cards are of the same colour,
 # as defined by the suit (Spades && Clubs are black,&& Hearts && Diamonds are red; e.g.['2S', '3C', '4C', '5S']
 # is a run of 4 black cards)
 def phasea_phase_five_2(group)
-  #TODO implement for phase 5_2 in like manner
-end
-
-
-def phasea_phase_type(group)
-  phase_type = nil
-
-  if group.count == 2 &&
-    phasea_phase_one(group[0]) == 1 &&
-    phasea_phase_one(group[1]) == 1
-
-    phase_type = 1
-  elsif group.count == 1 &&
-    phasea_phase_two(group[0]) == 2
-
-    phase_type = 2
-  elsif group.count == 1 &&
-    phasea_phase_three(group[0]) == 3
-
-    phase_type = 3
-  elsif group.count == 1 &&
-    phasea_phase_four(group[0]) == 4
-
-    phase_type = 4
-  elsif group.count == 1 &&
-    phasea_phase_five_1(group[0]) == 5.1
-
-    phase_type = 5.1
+  card_index = 0
+  first_value = nil
+  first_colour = nil
+  group.each do |card|
+    card_index += 1
+    value = CARDS[card[0]]
+    colour = COLOURS[card[1]]
+    first_value ||= value
+    first_colour ||= colour
+    return nil unless colour == first_colour
+    return nil unless value == first_value + (card_index - 1)
   end
 
-  # Phase 4 check e.g.[['4H', '5S', 'AC', '7C', '8H', 'AH', '0S', 'JC']]
-  #TODO implement for phase 4 in like manner
-
-  # Phase 5 check e.g.[['4H', '5D', 'AC', '7H'], ['2S', '3C', '4C', '5S']]
-  #TODO implement for phase 5 in like manner
-
-  return phase_type
+  5.2
 end
 
-# puts 'Should return 1:'
-# puts(phasea_phase_type([['2S', '2S', '2H'], ['7H', '7S', '7D']]))
+def phasea_phase_type(group)
+  if  group.count == 2 &&
+      group[0].count == 3 &&
+      group[1].count == 3 &&
+      phasea_phase_one(group[0]) == 1 &&
+      phasea_phase_one(group[1]) == 1
 
-# puts 'Should return 2:'
-# puts(phasea_phase_type([['2C', '2C', '4C', 'KC', '9C', 'AH', 'JC']]))
+    return 1
+  elsif group.count == 1 &&
+        group[0].count == 7 &&
+        phasea_phase_two(group[0]) == 2
 
-# puts 'Should return nil:'
-# puts(phasea_phase_type([['2C', '2C', '4C', 'KC', '9C', 'AH', 'JH']]))
+    return 2
+  elsif group.count == 1 &&
+        group[0].count == 4 &&
+        phasea_phase_three(group[0]) == 3
 
-# puts 'Should return 3:'
-# puts(phasea_phase_type([['4H', '4S', 'AC', '4C']]))
+    return 3
+  elsif group.count == 1 &&
+        group[0].count == 8 &&
+        phasea_phase_four(group[0]) == 4
+
+    return 4
+  elsif group.count == 1 &&
+        group[0].count == 4 &&
+        phasea_phase_five_1(group[0]) == 5.1
+
+    return 5.1
+  elsif group.count == 1 &&
+        phasea_phase_five_2(group[0]) == 5.2
+
+    return 5.2
+  end
+
+  nil
+end
